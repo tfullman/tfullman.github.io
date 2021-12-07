@@ -1,6 +1,6 @@
 ---
 title: "TWS Arctic Landscape Boundary Identification"
-date: "2021-12-06"
+date: "2021-12-07"
 runtime: shiny
 output:
   html_document:
@@ -418,9 +418,9 @@ Other data also can be turned on and off to aid in data exploration. Alaskan com
 
 The menu can also be used to select between three different basemaps:
 
-* `OpenStreetMap` provides road and human feature information, as well as selected natural features.
-* `Esri.WorldImagery` displays a digital photo, for a snapshot of ground conditions.
 * `Esri.WorldTopo` offers terrain features as well as various human features.
+* `Esri.WorldImagery` displays a digital photo, for a snapshot of ground conditions.
+* `OpenStreetMap` provides road and human feature information, as well as selected natural features.
 
 <br>
 
@@ -432,9 +432,9 @@ tmap_options(check.and.fix = TRUE)
 tm_tmp <-
   ## Add desired basemaps
   tm_basemap(
-    c('OpenStreetMap',
+    c('Esri.WorldTopoMap',
       'Esri.WorldImagery',
-      'Esri.WorldTopoMap')) +
+      'OpenStreetMap')) +
     
     ## Add each boundary option
     tm_shape(
@@ -531,7 +531,7 @@ Use the drop-down menu in the tool below to select between the various options. 
 ## a dropdown menu
 
 #### Shiny app
-shinyApp(
+shiny::shinyApp(
   
   ## Set up the UI
   ui = fluidPage(
