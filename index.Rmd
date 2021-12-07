@@ -1,14 +1,12 @@
 ---
-title: "Tim's GitHub website"
+title: "Welcome to Tim's GitHub website"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Welcome to Tim Fullman's GitHub website
-
-This is a test webpage used by Tim to try out content and practice web development skills. Development is ongoing.
+This is a test website used by Tim to try out content and practice web development skills. Development is ongoing.
 
 Tim Fullman is a wildlife ecologist who studies movement and distribution of large herbivores. As a Senior Ecologist with <a href = "https://www.wilderness.org/" target = "_blank">The Wilderness Society</a> in Anchorage, Alaska, his research investigates caribou responses to energy development and other human activity.
 
@@ -22,4 +20,4 @@ In all his work, Tim strives to develop scientific information that can be appli
 
 <br>
 
-Last updated: 2021-12-06
+Last updated: `r Sys.Date()`
