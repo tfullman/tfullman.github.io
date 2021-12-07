@@ -47,6 +47,7 @@ library(units)
 library(sf)
 library(tmap)
 library(tidyverse)
+library(shiny)
 
 ## Write a function for calculating area in acres below
 area_acres <- function(x){
@@ -211,7 +212,7 @@ As a starting point for identifying the priority landscapes for the Lower 48, th
 
 As the map below demonstrates, Alaska contains 20 "level 3" ecoregions. Data from the US <a href = "https://edg.epa.gov/metadata/catalog/search/resource/details.page?uuid=%7Bd60d4f92-706f-4f6a-9e38-6fb063bd2962%7D" target = "_blank">Environmental Protection Agency</a>.
 
-<img src="files/arctic/Map_Alaska_ecoregions.png" width = "100%">
+<img src="files/arctic/Map_Alaska_ecoregions.png">
 
 <br>
 
@@ -531,7 +532,7 @@ Use the drop-down menu in the tool below to select between the various options. 
 ## a dropdown menu
 
 #### Shiny app
-shiny::shinyApp(
+shinyApp(
   
   ## Set up the UI
   ui = fluidPage(
