@@ -10,10 +10,7 @@ navbar:
     - icon: fa-envelope fa-lg
       href: mailto:<tim_fullman@tws.org>
     - icon: fa-github fa-lg
-      href: http://github.com/tim_fullman
+      href: http://github.com/tfullman
     - icon: fa-twitter fa-lg
       href: https://twitter.com/TimFullman
-output:
-  html_document:
-    toc: true
-    toc_float: true
+output: html_document
