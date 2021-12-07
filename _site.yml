@@ -1,0 +1,19 @@
+name: "tim-github-website"
+navbar:
+  title: "Tim's GitHub website"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Arctic Landscape"
+      href: arctic.html
+  right:
+    - icon: fa-envelope fa-lg
+      href: mailto:<tim_fullman@tws.org>
+    - icon: fa-github fa-lg
+      href: http://github.com/tim_fullman
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/TimFullman
+output:
+  html_document:
+    toc: true
+    toc_float: true
