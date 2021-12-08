@@ -1,7 +1,6 @@
 ---
 title: "TWS Arctic Landscape Boundary Identification"
 date: "2021-12-07"
-runtime: shiny
 output:
   html_document:
     toc: true
@@ -47,7 +46,6 @@ library(units)
 library(sf)
 library(tmap)
 library(tidyverse)
-library(shiny)
 
 ## Write a function for calculating area in acres below
 area_acres <- function(x){
@@ -520,118 +518,6 @@ tm_tmp %>%
 
 ```
 
-<br>
-
-
-### Interactive tool
-
-Use the drop-down menu in the tool below to select between the various options. This will cause the information in the table to change to reflect the values for that specific option. Lists of communities and partners included under the selected option are listed in the interactive table below. Note that these lists provide a slight underestimate, as differences between spatial datasets lead some communities (e.g., Point Hope) to lie slightly outside of boundaries and thus to not be counted. Such biases are consistent across options.
-
-```{r shiny, echo = FALSE}
-## Create a shiny app that provides tabular statistics for each option with
-## a dropdown menu
-
-#### Shiny app
-shinyApp(
-  
-  ## Set up the UI
-  ui = fluidPage(
-    
-    ## Add a title panel:
-    titlePanel("Arctic Landscape Boundary Options"),
-    
-    ## Insert a line break
-    tags$br(),
-    
-    ## Set formatting to consist of two columns
-    sidebarLayout(
-      
-      ## Create a sidebar panel where users will select the species of interest
-      sidebarPanel(
-        
-        selectInput(
-          inputId = 'option',
-          label = 'Option',
-          choices = opts),
-      ),
-      
-      ## Set up the main panel to display results, divided into tabs
-      mainPanel(
-        tabsetPanel(
-          
-          ## Data table of all communities included
-          tabPanel(
-            'All',
-            tableOutput('opt_all')
-          ),
-          
-          ## Line plot of collisions over time
-          tabPanel(
-            'WACH Working Group',
-            tableOutput('opt_wg')
-          ),
-          
-          ## County-based collision maps
-          tabPanel(
-            'Key Partners',
-            tableOutput('opt_key')
-          )
-        )
-      )
-    )
-  ),
-  
-  ## Set up the server
-  server = function(input, output){
-    
-    ## Create reactive objects
-    
-    ## Extract the list of included communities
-    opt_all <-
-      reactive({
-        pluck(summary_data, input$option, 'communities') %>% 
-          sort()
-      })
-    
-    ## Extract the list of included communities
-    opt_wg <-
-      reactive({
-        pluck(summary_data, input$option, 'wg_communities') %>% 
-          sort()
-      })
-    
-    ## Extract the list of included communities
-    opt_key <-
-      reactive({
-        pluck(summary_data, input$option, 'partners') %>% 
-          sort()
-      })
-    
-    
-    ## Create data visualizations to display the reactive summary tables for
-    ## the option of interest
-    output$opt_all <-
-      renderTable({
-        opt_all()
-      })
-    
-    output$opt_wg <-
-      renderTable({
-        opt_wg()
-      })
-    
-    output$opt_key <-
-      renderTable({
-        opt_key()
-      })
-  }#,
-  
-  ## Define a height parameter to determine how much vertical space the app
-  ## should take up
-  #options = list(height = 500)
-)
-
-```
 
 <hr>
 
