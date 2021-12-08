@@ -425,7 +425,7 @@ The menu can also be used to select between three different basemaps:
 
 <br>
 
-```{r interactive_map, echo = FALSE, message = FALSE, warning = FALSE, cache = TRUE}
+```{r interactive_map, echo = FALSE, message = FALSE, warning = FALSE}
 ## Initate an interactive tmap
 tmap_mode('view')
 tmap_options(check.and.fix = TRUE)
