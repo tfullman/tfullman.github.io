@@ -1,6 +1,6 @@
 ---
 title: "TWS Arctic Landscape Boundary Identification"
-date: "2021-12-07"
+date: "2022-01-04"
 output:
   html_document:
     toc: true
@@ -94,7 +94,9 @@ tibble(
       ## All AK Level 3 ecoregions
       'ak_L3_ecoregions',
       ## Alaskan cities
-      'ak_cities'),
+      'ak_cities',
+      ## Alaska terrestrial ARPA boundary
+      'arpa_ak_boundary'),
   name = 
     c('ak',
       'npra',
@@ -111,7 +113,8 @@ tibble(
       'arctic_circle',
       'ambler',
       'ecoregion',
-      'ak_cities')
+      'ak_cities',
+      'arpa_ak')
 ) %>% 
   ## Map across the tibble to load and prep the shapefiles, assigning them with
   ## their identified names to the global environment. I'll actually use pwalk()
@@ -144,6 +147,13 @@ AKnative <-
   st_union(inupiat, gwichin) %>% 
   ## Clip the result to AK to exclude Canadian areas
   st_intersection(ak) %>% 
+  ## Dissolve this into one feature
+  st_union()
+
+## Create a combined Alaska Native traditional lands and caribou range polygon
+combined <- 
+  ## Combine the polygons
+  st_union(AKnative, caribou) %>% 
   ## Dissolve this into one feature
   st_union()
 
@@ -194,11 +204,13 @@ While the Arctic landscape was identified as one of the TWS priority landscapes,
 
 This document presents a starting point to stimulate thinking about how the Arctic landscape could be defined. It describes multiple options and provides interactive data to help the Arctic team explore differences between possible boundaries. **These options are not meant to be an exhaustive set of possibilities**, but rather to present a possible set of options that can further the Arctic team's thinking around selecting a boundary for the Arctic Landscape. In the words of TWS Senior Science Director Greg Aplet, whatever boundary we choose, *“the most important thing is that the boundary reflects an ecosystem of sufficient size to sustain its contents.”*
 
-Three potential options are described:
+Five potential options are described:
 
 1. Arctic ecoregions
 2. Traditional Indigenous homelands
 3. Caribou ranges
+4. Arctic Research and Policy Act boundary
+5. Intersection of Indigenous homelands and caribou range
 
 We first provide an overview of each option, before offering interactive tools for exploring tradeoffs.
 
@@ -297,6 +309,50 @@ Using the combined caribou range area to define the Arctic landscape would help 
 
 <hr>
 
+## Option 4: ARPA boundary
+
+The US Arctic Research and Policy Act (ARPA) of 1984 was intended to create a coomprehensive national policy for Arctic research needs and objectives. <a href = "https://www.arctic.gov/legislation/" target = "_blank">Section 112</a> of ARPA provides the following definition of the Arctic: *"the term 'Arctic' means all United States and foreign territory north of the Arctic Circle and all United States territory north and west of the boundary formed by the Porcupine, Yukon, and Kuskokwim Rivers; all contiguous seas, including the Arctic Ocean and the Beaufort, Bering and Chukchi Seas; and the Aleutian chain."*
+
+The map below displays the portions of Alaska contained within this boundary. Note that this definition also includes extensive offshore areas.
+
+<img src="files/arctic/Map_ARPA_boundary.png">
+
+<br>
+
+The terrestrial portion of the APRA boundary covers a total of `r arpa_ak %>% area_acres() %>% format(big.mark = ',')` acres in Alaska.
+
+Use of this boundary for the Arctic landscape would capture all of TWS' work in the NPR-A and Arctic Refuge and would include main partner communities. Efforts relating to the Ambler Road would fall entirely within this boundary. However, this boundary would also extend far south of areas typically covered by TWS work in Alaska, including the Yukon-Kuskokwim Delta and Aleutian Islands.
+
+<img src="files/arctic/Map_option_4_ARPA.png">
+
+<br>
+
+<hr>
+
+## Option 5: Overlap of Indigenous homelands and caribou ranges
+
+This boundary combines options 2 and 3 to yield the outer bounds of the Indigenous homelands and the caribou ranges as the landscape boundary.
+
+There are several benefits to this approach, which would:
+
+1. Convey the importance of centering Indigenous people
+2. Ensure we do not artificially cut off the boundaries of key cultural and subsistence species that we study, recognizing the need for full life-cycle protections and aligning with the scientific work that we do
+3. Make sure we capture most of the relevant areas and partners where we work currently and are likely to work in the future
+
+Such a boundary would include areas where we do not currently focus as much of our work, like the Seward Peninsula, but just because such areas are within the boundary it does not necessarily mean they must be a focus of our work. Their inclusion does, however, leave open opportunities to build relationships and increase local support as we step more fully into an Arctic landscape strategy that extends beyond federal protected areas.
+
+Alaska office staff also suggested including the surrounding oceans in the landscape. This inclusion is not visualized in the maps or acreages below, but we may consider how we can depict marine areas in our mapping of the Arctic Landscape to recognize the importance of marine areas and species for our Alaska Native partners and for protecting full life cycles of anadromous fish and other species.
+
+Combining traditional Indigenous homelands and caribou ranges yields a boundary covering `r combined %>% area_acres() %>% format(big.mark = ',')` acres.
+
+Use of this boundary for the Arctic landscape would capture all of TWS' work in the NPR-A and Arctic Refuge and would include main partner communities and efforts relating to the Ambler Road.
+
+<img src="files/arctic/Map_option_5_combined_Indigenous_caribou_range.png">
+
+<br>
+
+<hr>
+
 ## Summary
 
 ### Summary table
@@ -304,14 +360,16 @@ Using the combined caribou range area to define the Arctic landscape would help 
 The table below summarizes data for each of the three options.
 
 ```{r summary_table, echo = FALSE, message = FALSE, warning = FALSE}
-opts <- c('Ecoregions', 'Indigenous homelands', 'Caribou ranges')
+opts <- c('Ecoregions', 'Indigenous homelands', 'Caribou ranges', 'ARPA boundary', 'Combined 2+3')
 
 ## Calculate summary information
 summary_data <-
   list(
     arctic_ecoregion,
     AKnative,
-    caribou) %>% 
+    caribou,
+    arpa_ak,
+    combined) %>% 
   imap(
     function(.x, .y){
       ## Identify the cities that intersect with the study area polygon
@@ -408,6 +466,8 @@ The three options described above are depicted in the map as follows:
 * <span style="color: blue;">Option 1 - </span> Arctic ecoregion
 * <span style="color: purple;">Option 2 - </span> Indigenous homelands
 * <span style="color: red;">Option 3 - </span> Caribou range
+* <span style="color: green;">Option 4 - </span> ARPA boundary
+* <span style="color: orange;">Option 5 - </span> Options 2+3
 
 <br>
 
@@ -456,6 +516,20 @@ tm_tmp <-
       name = 'Option 3 - Caribou range') +
     tm_borders(
       col = 'red',
+      lwd = 3) +
+  
+    tm_shape(
+      arpa_ak,
+      name = 'Option 4 - ARPA boundary') +
+    tm_borders(
+      col = 'darkgreen',
+      lwd = 3) +
+    
+    tm_shape(
+      combined,
+      name = 'Option 5 - Indigenous homelands and caribou range') +
+    tm_borders(
+      col = 'orange',
       lwd = 3) +
     
     ## Add additional features
